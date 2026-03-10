@@ -3,7 +3,7 @@
 Este proyecto es una herramienta de asistencia virtual diseñada para resolver dudas frecuentes sobre matriculación y trámites administrativos del centro.
 
 ##  Demo en vivo
-Puedes probar el chatbot funcionando aquí: **[PON AQUÍ TU URL DE VERCEL CUANDO LA TENGAS]**
+Puedes probar el chatbot funcionando aquí: **[chat-bot-secretaria-virtual-mislata.vercel.app]**
 
 ## 📂 Estructura del proyecto
 * `/chat-bot-secretaria-virtual`: Contiene el frontend desarrollado en **React** con **Vite**.
