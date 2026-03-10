@@ -29,21 +29,17 @@ const ChatMislata = () => {
     try {
       const response = await fetch('https://a678lvtjr1.execute-api.us-east-1.amazonaws.com/chat', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           text: currentText,      
           sessionId: "test1"      
         }), 
       });
 
-      if (!response.ok) throw new Error('Error en la respuesta del servidor');
-
+      if (!response.ok) throw new Error('Error en el servidor');
       const data = await response.json();
       
       let botReply = "Lo siento, no he podido procesar esa consulta.";
-      
       if (data.reply) {
         botReply = data.reply;
       } else if (data.text) {
@@ -55,32 +51,24 @@ const ChatMislata = () => {
 
       setMessages(prev => [...prev, { role: 'bot', text: botReply }]);
     } catch (error) {
-      console.error("Error detallado:", error);
-      setMessages(prev => [...prev, { role: 'bot', text: 'Vaya, parece que hay un problema de conexión. Revisa el CORS en AWS.' }]);
+      setMessages(prev => [...prev, { role: 'bot', text: 'Vaya, hay un problema de conexión. Inténtalo de nuevo.' }]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
-      {/* Botón Flotante */}
-      {!isOpen && (
-        <button 
-          onClick={() => setIsOpen(true)}
-          className="bg-red-700 hover:bg-red-800 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center gap-2 group"
-        >
-          <MessageSquare size={24} className="group-hover:rotate-12 transition-transform" />
-          <span className="font-semibold pr-2 text-sm">Secretaría Virtual</span>
-        </button>
-      )}
-
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 font-sans flex flex-col items-end">
       {/* Ventana del Chat */}
       {isOpen && (
-        <div className="bg-white w-[380px] h-[550px] rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+        <div className="bg-white 
+          w-[calc(100vw-2rem)] sm:w-[380px] 
+          h-[75vh] sm:h-[550px] 
+          max-h-[600px]
+          mb-4 rounded-2xl shadow-2xl flex flex-col border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
           
-          {/* Cabecera Profesional */}
-          <div className="bg-red-700 p-4 text-white flex justify-between items-center shadow-lg">
+          {/* Cabecera */}
+          <div className="bg-red-700 p-4 text-white flex justify-between items-center shadow-lg shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-red-700 font-black shadow-inner">
                 M
@@ -95,7 +83,7 @@ const ChatMislata = () => {
             </div>
             <button 
               onClick={() => setIsOpen(false)} 
-              className="hover:bg-red-600 p-2 rounded-full transition-colors"
+              className="hover:bg-red-600 p-2 rounded-full transition-colors focus:outline-none"
             >
               <X size={20}/>
             </button>
@@ -126,10 +114,10 @@ const ChatMislata = () => {
           </div>
 
           {/* Pie / Input */}
-          <div className="p-4 bg-white border-t">
-            <div className="flex items-center gap-2 bg-gray-100 rounded-2xl px-4 py-2.5 focus-within:ring-2 focus-within:ring-red-500/50 focus-within:bg-white transition-all shadow-inner">
+          <div className="p-4 bg-white border-t shrink-0">
+            <div className="flex items-center gap-2 bg-gray-100 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-red-500/50 focus-within:bg-white transition-all shadow-inner">
               <input 
-                className="bg-transparent flex-1 outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                className="bg-transparent flex-1 outline-none text-base sm:text-sm text-gray-700 placeholder:text-gray-400"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
@@ -143,14 +131,19 @@ const ChatMislata = () => {
                 <Send size={18} fill="currentColor" />
               </button>
             </div>
-            <div className="flex justify-center items-center gap-2 mt-3 opacity-30">
-              <div className="h-[1px] w-8 bg-gray-400"></div>
-              <p className="text-[9px] font-bold tracking-tighter text-gray-600 uppercase">IABD Proyecto</p>
-              <div className="h-[1px] w-8 bg-gray-400"></div>
-            </div>
+            <p className="text-[9px] font-bold text-center mt-3 opacity-30 uppercase tracking-tighter">IABD Proyecto</p>
           </div>
         </div>
       )}
+
+      {/* Botón Flotante */}
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-red-700 hover:bg-red-800 text-white p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center group"
+      >
+        {isOpen ? <X size={24} /> : <MessageSquare size={24} className="group-hover:rotate-12 transition-transform" />}
+        {!isOpen && <span className="hidden sm:inline font-semibold ml-2 pr-1 text-sm">Secretaría Virtual</span>}
+      </button>
     </div>
   );
 };
